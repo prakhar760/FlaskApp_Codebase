@@ -25,29 +25,7 @@
             });
             });
 
-
-            $(document).ready(function(){
-                $('#alert_email_checkbox').change(function(event) {
-                    event.preventDefault()
-                    data = {
-                        'alert_email_checkbox': $('#alert_email_checkbox').is(':checked'),
-                        'alert_email_textbox': $('#alert_email_textbox').val(),
-                    }
-                    $.ajax({
-                        type: 'POST',
-                        url: '/submit',
-                        data: data,
-                        success: function(data) {
-                            alert(data);
-                        },
-                        error: function(error){
-                            alert('Checkbox submission failed!');
-                        }
-                    });
-                });
-            });
-            
-            
+                         
             function upload_file()
             {
                 $.ajax({
@@ -66,61 +44,7 @@
                             });
             }
 
-            function download_file()
-            {
-                data = {
-                        'download_button': 'True',
-                        }
-                $.ajax({
-                    type: 'POST',
-                    url: '/submit',
-                    data: data,
-                    xhrFields: {
-                                    responseType: 'blob' // to avoid binary data being mangled on charset conversion
-                               },
-                    // to download file as an attachment
-                    //Reference - https://stackoverflow.com/questions/16086162/handle-file-download-from-ajax-post
-                    success: function(blob, status, xhr) {
-                    // check for a filename
-                    var filename = "";
-                    var disposition = xhr.getResponseHeader('Content-Disposition');
-                    if (disposition && disposition.indexOf('attachment') !== -1) {
-                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                        var matches = filenameRegex.exec(disposition);
-                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-                    }
-
-                    if (typeof window.navigator.msSaveBlob !== 'undefined') {
-                    // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
-                    window.navigator.msSaveBlob(blob, filename);
-                    } else {
-                        var URL = window.URL || window.webkitURL;
-                        var downloadUrl = URL.createObjectURL(blob);
-
-                    if (filename) {
-                        // use HTML5 a[download] attribute to specify filename
-                        var a = document.createElement("a");
-                        // safari doesn't support this yet
-                    if (typeof a.download === 'undefined') {
-                        window.location.href = downloadUrl;
-                    } else {
-                        a.href = downloadUrl;
-                        a.download = filename;
-                        document.body.appendChild(a);
-                        a.click();
-                    }
-                    } else {
-                    window.location.href = downloadUrl;
-                    }
-                        setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
-                    }
-                    },
-                    error: function(error){
-                        alert('Form submission failed!');
-                    }
-                });
-            }
-
+            
             function video_inference()
             {
                 data = {
@@ -211,27 +135,10 @@
                             <button type="submit" class="btn-primary" name="live_inference_button" id="live_inference_button" onclick="live_inference()">Live Inference</button>
                             <i class="ri-settings-4-fill button__icon"></i>
                         </span>
-                        <span class="download__button">
-                            <button type="submit" class="btn-primary" name="download_button" id="download_button" onclick="download_file()">Download Report</button>
-                            <i class="ri-file-download-fill button__icon"></i>
-                        </span>
+                        
                     </div>
                     <center>
-                    <span class="email__sending">
-                        <div class="send__email">
-                            <input type="email" placeholder="Enter Valid Mail" value="support.ai@giindia.com" name="alert_email_textbox" id="alert_email_textbox">
-                        </div>
-                        <div class="toggle__content">
-                            <label class="toggle__label">
-                                <input type="checkbox" class="toggle__check" name="alert_email_checkbox" id='alert_email_checkbox' />
-                                <span class="email__label">Send Alert</span>
-                                <div class="toggle__rail">
-                                    <span class="toggle__circle"></span>
-                                    <span class="toggle__border"></span>
-                                </div>
-                            </label>
-                        </div>
-                    </span></center>
+                    
                 </form>
             </section>
             </div>
